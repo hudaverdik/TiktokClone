@@ -56,6 +56,39 @@ The TiktokClone app should now be running on your mobile device.
 
 Usage
 ...
+## Usage
+
+Here are some instructions on how to use TiktokClone:
+
+1. **Registration/Login:**
+   - Open the TiktokClone app on your device.
+   - If you're a new user, click the "Register" button and provide your email and password to create an account.
+   - If you're an existing user, click the "Login" button and enter your credentials to sign in.
+
+2. **Explore Content:**
+   - Once you're logged in, you'll be taken to the main feed where you can explore and watch videos.
+   - Swipe up and down to scroll through the feed.
+   - Tap on a video to play it in full screen.
+
+3. **Upload Your Videos:**
+   - To upload your own videos, click the "Upload" button.
+   - Choose a video from your device's gallery.
+   - Add a caption and tags, then click "Upload."
+
+4. **Like and Comment:**
+   - While watching a video, you can tap the "Like" button to show your appreciation.
+   - Leave comments on videos to interact with other users.
+
+5. **Profile and Settings:**
+   - Access your profile by clicking on your profile picture.
+   - Edit your profile information and settings.
+
+6. **Logout:**
+   - To log out of your account, go to the settings page and click "Logout."
+
+Feel free to explore and enjoy TiktokClone! If you have any questions or encounter any issues, please don't hesitate to contact our support team at [support@tiktokclone.com](mailto:support@tiktokclone.com).
+
+Enjoy using TiktokClone and have fun sharing your videos with the community!
 
 License
 This project is licensed under the MIT License - see the LICENSE file for details.
