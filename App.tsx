@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { User } from 'firebase/auth';
-import { firebaseApp,auth  } from './firebase';
-import { AuthData, } from './src/api/firebase-auth';
-import MainAppScreen from './src/screens/MainAppScreen';
-import LoginScreen from './src/screens/LoginScreen';
-import RegistrationScreen from './src/screens/RegistrationScreen';
-import { registerUser, loginUser, logoutUser } from './src/api/firebase-auth';
+import React, { useEffect, useState } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { User } from "firebase/auth";
+import { firebaseApp, auth } from "./firebase";
+import { AuthData } from "./src/api/firebase-auth";
+import MainAppScreen from "./src/screens/MainAppScreen";
+import LoginScreen from "./src/screens/LoginScreen";
+import RegistrationScreen from "./src/screens/RegistrationScreen";
+import { registerUser, loginUser, logoutUser } from "./src/api/firebase-auth";
+import { VideoProvider } from "./src/context/VideoContext";
 
 const Stack = createStackNavigator();
 
 const App = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setloading] = useState(true);
 
   useEffect(() => {
     // Check user authentication status
@@ -24,6 +26,9 @@ const App = () => {
         // No user is signed in
         setUser(null);
       }
+      setTimeout(()=>{
+        setloading(false); 
+      }, 4000)
     });
 
     return () => {
@@ -39,7 +44,7 @@ const App = () => {
       // Registration successful; you can now navigate to the main screen
     } catch (error) {
       // Handle registration error
-      console.error('Registration error:', error);
+      console.error("Registration error:", error);
     }
   };
 
@@ -50,7 +55,7 @@ const App = () => {
       // Login successful; you can now navigate to the main screen
     } catch (error) {
       // Handle login error
-      console.error('Login error:', error);
+      console.error("Login error:", error);
     }
   };
 
@@ -60,24 +65,36 @@ const App = () => {
       await logoutUser(); // Calls the logoutUser function from firebase-auth.ts
       setUser(null); // Set user to null in state
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
     }
   };
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+      <VideoProvider>
+      <Stack.Navigator
+        initialRouteName="MainApp"
+        screenOptions={{ headerShown: false }}
+      >
         {user ? (
           // User is authenticated, navigate to main app screen and pass the user object as a parameter
-          <Stack.Screen name="MainApp">
-            {(props) => (
-              <MainAppScreen
-                {...props}
-                user={user}
-                handleLogout={handleLogout} // Pass handleLogout to MainAppScreen
-              />
-            )}
-          </Stack.Screen>
+<Stack.Screen
+  name="MainApp"
+  options={{
+    title: 'Main App',
+  }}
+>
+  {(props) => (
+    <MainAppScreen
+      {...props}
+      user={user}
+      handleLogout={handleLogout}
+      onVideoPress={(video)=>{console.log('Video pressed:', video);
+      }} // Replace 'yourOnVideoPressFunction' with your actual function
+    />
+  )}
+</Stack.Screen>
+
         ) : (
           // User is not authenticated, show login and registration screens
           <>
@@ -95,6 +112,7 @@ const App = () => {
           </>
         )}
       </Stack.Navigator>
+    </VideoProvider>
     </NavigationContainer>
   );
 };

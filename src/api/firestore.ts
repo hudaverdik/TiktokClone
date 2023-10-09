@@ -1,65 +1,44 @@
-import {
-  collection,
-  addDoc,
-  getDocs,
-  doc,
-  updateDoc,
-  deleteDoc,
-} from 'firebase/firestore';
-import { firestore } from '../../firebase';
+import { doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore';
+import { firestore } from '../../firebase'; // Import the Firebase Firestore instance (adjust the import path as needed)
 
-// Define a type for the video document
-export interface VideoStore {
-  id: string;
-  title: string;
-  videoUrl: string;
-  // Add other properties as needed
-}
+// Define a reference to the 'caption' document
+const captionDocument = doc(firestore, 'videos/GQV0L4ex55N1AZ7mqtoY/video/OEDExFUuAeTSEFRL9LNg/caption');
 
-// Create (Add) Data
-export const addVideoToFirestore = async (videoData: VideoStore): Promise<string> => {
+// Fetch caption document data
+export const fetchCaptionDocumentData = async () => {
   try {
-    const docRef = await addDoc(collection(firestore, 'videos'), videoData);
-    console.log('Video document added with ID:', docRef.id);
-    return docRef.id;
+    const captionSnapshot = await getDoc(captionDocument);
+    if (captionSnapshot.exists()) {
+      const captionData = captionSnapshot.data();
+      return captionData;
+    } else {
+      console.error('Caption document does not exist.');
+      return null;
+    }
   } catch (error) {
-    console.error('Error adding video document:', error);
+    console.error('Error fetching caption document data:', error);
     throw error;
   }
 };
 
-// Read Data
-export const fetchVideosFromFirestore = async (): Promise<VideoStore[]> => {
+// Update caption document data
+export const updateCaptionDocumentData = async (updatedData: Partial<any>) => {
   try {
-    const videoCollection = collection(firestore, 'videos');
-    const videoData = await getDocs(videoCollection);
-    return videoData.docs.map((doc) => doc.data()) as VideoStore[];
+    await setDoc(captionDocument, updatedData, { merge: true });
+    console.log('Caption document updated successfully.');
   } catch (error) {
-    console.error('Error fetching videos:', error);
+    console.error('Error updating caption document data:', error);
     throw error;
   }
 };
 
-// Update Data
-export const updateVideoInFirestore = async (videoId: string, updatedData: Partial<VideoStore>): Promise<void> => {
+// Delete caption document
+export const deleteCaptionDocument = async () => {
   try {
-    const videoRef = doc(firestore, 'videos', videoId);
-    await updateDoc(videoRef, updatedData);
-    console.log('Video document updated successfully');
+    await deleteDoc(captionDocument);
+    console.log('Caption document deleted successfully.');
   } catch (error) {
-    console.error('Error updating video document:', error);
-    throw error;
-  }
-};
-
-// Delete Data
-export const deleteVideoFromFirestore = async (videoId: string): Promise<void> => {
-  try {
-    const videoRef = doc(firestore, 'videos', videoId);
-    await deleteDoc(videoRef);
-    console.log('Video document deleted successfully');
-  } catch (error) {
-    console.error('Error deleting video document:', error);
+    console.error('Error deleting caption document:', error);
     throw error;
   }
 };
